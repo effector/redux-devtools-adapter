@@ -1,0 +1,45 @@
+{
+  "name": "@effector/redux-devtools-adapter",
+  "version": "0.1.0",
+  "description": "Simple adapter to connect Effector's Inspect API to Redux DevTools",
+  "repository": "git@github.com:effector/redux-devtools-adapter.git",
+  "author": "AlexandrHoroshih <xad71rus@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "type": "module",
+  "module": "./dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.umd.cjs"
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build:code": "vite build",
+    "build:types": "tsc",
+    "build": "pnpm build:code && pnpm build:types",
+    "dev": "pnpm run build && vite",
+    "preview": "pnpm run build && vite preview"
+  },
+  "devDependencies": {
+    "@effector/redux-devtools-adapter": "link:",
+    "@types/react": "^18.0.38",
+    "@types/react-dom": "^18.0.11",
+    "@vitejs/plugin-react": "^4.0.0",
+    "effector": "^22.8.1",
+    "effector-react": "^22.5.1",
+    "fs-extra": "^11.1.1",
+    "mvp.css": "^1.12.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "vite": "^4.3.1",
+    "zx": "^7.2.1"
+  },
+  "peerDependencies": {
+    "effector": "^22.8.1"
+  },
+  "dependencies": {
+    "typescript": "^5.0.4"
+  }
+}
