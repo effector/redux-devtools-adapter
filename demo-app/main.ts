@@ -1,22 +1,23 @@
 import "mvp.css";
 import { createRoot } from "react-dom/client";
-import { attachReduxDevTools } from "@effector/redux-devtools-adapter";
+import { attachReduxDevTools } from "../";
 
 import { App, scopeOne, scopeTwo } from "./app";
 import { createElement } from "react";
 
 attachReduxDevTools({
-  appName: "Demo App",
+  name: "Demo App",
 });
 
 attachReduxDevTools({
-  appName: "Demo app (scope)",
+  name: "Demo app (scope)",
   scope: scopeOne,
 });
 
 attachReduxDevTools({
-  appName: "Demo app (scope + traces)",
+  name: "Demo app (scope + traces)",
   scope: scopeTwo,
+  trace: true,
 });
 
 const root = document.getElementById("app");
