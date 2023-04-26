@@ -1,4 +1,4 @@
-import { inspect } from "effector/inspect";
+import { Message, inspect } from "effector/inspect";
 import type { Scope } from "effector";
 
 const devTools = (window as any).__REDUX_DEVTOOLS_EXTENSION__;
@@ -24,56 +24,22 @@ export function attachReduxDevTools({
 }): () => void {
   if (!devTools) return fallback();
 
-  const fxIdMap: Record<string, string> = {};
-
-  const { state, set } = createState();
-
+  const state = {};
   const controller = devTools.connect({
     name: getInstanceName(name),
     ...devToolsConfig,
   });
-
   controller.init(state);
+
+  const report = createReporter(state);
 
   const uninspect = inspect({
     scope,
     trace,
     fn: (m) => {
-      if (m.kind === "store" && !m.meta.derived) {
-        set(`${m.id}_${m.name}`, m.value);
-      }
-
-      if (m.kind === "effect") {
-        // @ts-expect-error
-        fxIdMap[m.stack.fxID as string] = m.name;
-        controller.send(
-          {
-            type: `[${m.kind}] ${m.name}`,
-            params: m.value,
-            callId: m.stack.fxID,
-          },
-          state
-        );
-      } else if (m.kind === "event" && m.meta.named === "finally") {
-        const parentName = fxIdMap[m.stack.fxID as string];
-        controller.send(
-          {
-            type: `[${m.kind}] ${parentName}.${m.name}`,
-            params: (m.value as any).params,
-            status: (m.value as any).status,
-            result: (m.value as any).result,
-            callId: m.stack.fxID,
-          },
-          state
-        );
-      } else {
-        controller.send(
-          {
-            type: `[${m.kind}] ${m.name}`,
-            value: m.value,
-          },
-          state
-        );
+      const act = report(m);
+      if (act) {
+        controller.send(act, state);
       }
     },
   });
@@ -102,14 +68,114 @@ function getInstanceName(name: string): string {
   return "☄️ no title instance";
 }
 
-function createState() {
-  const state: Record<string, unknown> = {};
-  function set(key: string, value: unknown) {
-    state[key] = value;
-  }
+// reporting
+const fxIdMap = new Map<unknown, string>();
 
-  return {
-    state,
-    set,
+function createReporter(state: Record<string, unknown>) {
+  return (m: Message): Record<string, unknown> | void => {
+    // effects
+    if (isEffectCall(m)) {
+      const name = getName(m);
+      fxIdMap.set(m.stack.fxID, name);
+      updateInFlight(state, name, 1);
+      return {
+        type: `[effect] ${m.name || "unknown"}`,
+        params: m.value,
+      };
+    }
+
+    if (isEffectFinally(m)) {
+      const name = fxIdMap.get(m.stack.fxID)!;
+
+      updateInFlight(state, name, -1);
+
+      if ((m.value as any).status === "done") {
+        return {
+          type: `[effect] ${name}.done`,
+          params: (m.value as any).params!,
+          result: (m.value as any).result,
+        };
+      }
+      if ((m.value as any).status === "fail") {
+        return {
+          type: `[effect] ${name}.fail`,
+          params: (m.value as any).params!,
+          error: (m.value as any).error,
+        };
+      }
+
+      return {
+        type: `[effect] ${name}.${(m.value as any).status}`,
+      };
+    }
+
+    // stores
+    if (isStoreUpdate(m)) {
+      saveStoreUpdate(state, m);
+      return {
+        type: `[store] ${getName(m)}`,
+        value: m.value,
+      };
+    }
+    if (isCombineUpdate(m)) {
+      saveStoreUpdate(state, m);
+      return {
+        type: `[combine] ${getName(m)}`,
+        value: m.value,
+      };
+    }
+
+    // events
+    if (isEvent(m)) {
+      return {
+        type: `[event] ${getName(m)}`,
+        params: m.value,
+      };
+    }
   };
+}
+
+// effects
+function isEffectCall(m: Message) {
+  return m.kind === "effect";
+}
+function isEffectFinally(m: Message) {
+  return m.kind === "event" && m.meta.named === "finally";
+}
+function updateInFlight(
+  state: Record<string, unknown>,
+  name: string,
+  up: number
+) {
+  const inFlightName = `${name}.inFlight`;
+  const inFlight = (state[inFlightName] as number) || 0;
+  state[inFlightName] = inFlight + up;
+}
+
+// stores
+function isStoreUpdate(m: Message) {
+  /**
+   * Not derived and not effector's internal stores
+   */
+  return m.kind === "store" && !m.meta.derived && !isEffectorInternal(m);
+}
+function isCombineUpdate(m: Message) {
+  return m.kind === "store" && m.meta.isCombine && !isEffectorInternal(m);
+}
+function saveStoreUpdate(state: Record<string, unknown>, m: Message) {
+  const name = getName(m);
+  state[name] = m.value;
+}
+
+// events
+function isEvent(m: Message) {
+  return m.kind === "event" && !m.meta.derived && !isEffectorInternal(m);
+}
+
+// util
+function isEffectorInternal(m: Message) {
+  return !!m.meta.named;
+}
+function getName(m: Message) {
+  return m.name || `unknown_${m.id}`;
 }

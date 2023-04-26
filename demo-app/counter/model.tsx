@@ -1,4 +1,10 @@
-import { createEvent, createStore, createEffect, sample } from "effector";
+import {
+  createEvent,
+  createStore,
+  createEffect,
+  sample,
+  combine,
+} from "effector";
 
 export const buttonClicked = createEvent();
 export const $counter = createStore(0).on(buttonClicked, (s) => s + 1);
@@ -15,9 +21,15 @@ const someSideEffectFx = createEffect(async (count: number) => {
   return count;
 });
 
+const someOtherEffectFx = createEffect(async (count: number) => {
+  return count;
+});
+
+const $ref = combine({ count: $counter });
+
 sample({
-  clock: $counter,
-  target: someSideEffectFx,
+  clock: $ref.map(({ count }) => count),
+  target: [someSideEffectFx, someOtherEffectFx],
 });
 
 sample({
