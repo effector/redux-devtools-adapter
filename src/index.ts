@@ -37,9 +37,16 @@ export function attachReduxDevTools({
     scope,
     trace,
     fn: (m) => {
-      const act = report(m);
+      let act = report(m);
       if (act) {
-        controller.send(act, state);
+        if (trace) {
+          act = {
+            ...act,
+            trace: readTrace(m.trace!),
+          };
+        }
+
+        controller.send(act, {...state});
       }
     },
   });
@@ -178,4 +185,13 @@ function isEffectorInternal(m: Message) {
 }
 function getName(m: Message) {
   return m.name || `unknown_${m.id}`;
+}
+function readTrace(trace: Message[]) {
+  return trace.map((m) => {
+    return {
+      type: m.kind,
+      name: m.name,
+      value: m.value,
+    };
+  });
 }
