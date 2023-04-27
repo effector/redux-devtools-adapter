@@ -27,7 +27,7 @@
     "@types/react": "^18.0.38",
     "@types/react-dom": "^18.0.11",
     "@vitejs/plugin-react": "^4.0.0",
-    "effector": "^22.8.1",
+    "effector": "22.8.2",
     "effector-react": "^22.5.1",
     "fs-extra": "^11.1.1",
     "mvp.css": "^1.12.0",

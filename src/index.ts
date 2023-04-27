@@ -144,7 +144,13 @@ function createReporter(state: Record<string, unknown>) {
     // operators
     if (isSample(m)) {
       return {
-        type: `[sample] ${getSampleName(m)}`,
+        type: `[${m.kind}] ${getSampleName(m)}`,
+        value: m.value,
+      };
+    }
+    if (isForward(m)) {
+      return {
+        type: `[forward]`,
         value: m.value,
       };
     }
@@ -185,9 +191,12 @@ function isEvent(m: Message) {
   return m.kind === "event" && !m.meta.derived && !isEffectorInternal(m);
 }
 
-// samples
+// operators
 function isSample(m: Message) {
-  return m.kind === "sample";
+  return m.kind === "sample" || m.kind === "guard";
+}
+function isForward(m: Message) {
+  return m.kind === "forward";
 }
 
 // util

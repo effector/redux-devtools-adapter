@@ -5,6 +5,8 @@ import {
   sample,
   combine,
   split,
+  forward,
+  guard,
 } from "effector";
 
 export const buttonClicked = createEvent();
@@ -68,4 +70,15 @@ split({
 const { aaa, bbb } = split(sampledEvent, {
   aaa: (kek) => parseInt(kek.split("_")[0]) % 2 === 0,
   bbb: (_kek) => true,
+});
+
+forward({
+  from: a,
+  to: b,
+});
+
+guard({
+  clock: a,
+  filter: () => false,
+  target: b,
 });
