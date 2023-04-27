@@ -85,7 +85,7 @@ function createReporter(state: Record<string, unknown>) {
       const name = getName(m);
       fxIdMap.set(m.stack.fxID, name);
       return {
-        type: `[effect] ${m.name || "unknown"}`,
+        type: `☄️ [effect] ${m.name || "unknown"}`,
         params: m.value,
       };
     }
@@ -99,14 +99,14 @@ function createReporter(state: Record<string, unknown>) {
 
       if ((m.value as any).status === "done") {
         return {
-          type: `[effect] ${name}.done`,
+          type: `✅ [effect] ${name}.done`,
           params: (m.value as any).params!,
           result: (m.value as any).result,
         };
       }
       if ((m.value as any).status === "fail") {
         return {
-          type: `[effect] ${name}.fail`,
+          type: `❌ [effect] ${name}.fail`,
           params: (m.value as any).params!,
           error: (m.value as any).error,
         };
@@ -128,7 +128,7 @@ function createReporter(state: Record<string, unknown>) {
     if (isCombineUpdate(m)) {
       saveStoreUpdate(state, m);
       return {
-        type: `[combine] ${getName(m)}`,
+        type: `🤹‍♂️ [combine] ${getName(m)}`,
         value: m.value,
       };
     }
