@@ -37,16 +37,16 @@ export function attachReduxDevTools({
     scope,
     trace,
     fn: (m) => {
-      let act = report(m);
+      const act = report(m);
       if (act) {
         if (trace) {
-          act = {
-            ...act,
-            trace: readTrace(m.trace!),
-          };
+          act.trace = readTrace(m.trace!);
+        }
+        if (m.loc) {
+          act.loc = m.loc;
         }
 
-        controller.send(act, {...state});
+        controller.send(act, { ...state });
       }
     },
   });
@@ -80,6 +80,7 @@ const fxIdMap = new Map<unknown, string>();
 
 function createReporter(state: Record<string, unknown>) {
   return (m: Message): Record<string, unknown> | void => {
+    console.log(m);
     // effects
     if (isEffectCall(m)) {
       const name = getName(m);
@@ -139,6 +140,14 @@ function createReporter(state: Record<string, unknown>) {
         params: m.value,
       };
     }
+
+    // operators
+    if (isSample(m)) {
+      return {
+        type: `[sample] ${getSampleName(m)}`,
+        value: m.value,
+      };
+    }
   };
 }
 
@@ -161,9 +170,6 @@ function updateInFlight(
 
 // stores
 function isStoreUpdate(m: Message) {
-  /**
-   * Not derived and not effector's internal stores
-   */
   return m.kind === "store" && !m.meta.derived && !isEffectorInternal(m);
 }
 function isCombineUpdate(m: Message) {
@@ -179,12 +185,24 @@ function isEvent(m: Message) {
   return m.kind === "event" && !m.meta.derived && !isEffectorInternal(m);
 }
 
+// samples
+function isSample(m: Message) {
+  return m.kind === "sample";
+}
+
 // util
 function isEffectorInternal(m: Message) {
   return !!m.meta.named;
 }
 function getName(m: Message) {
   return m.name || `unknown_${m.id}`;
+}
+function getSampleName(m: Message) {
+  return m.name || locToString(m.loc) || `unknown_${m.id}`;
+}
+function locToString(loc: any) {
+  if (!loc) return null;
+  return `${loc.file}:${loc.line}:${loc.column}`;
 }
 function readTrace(trace: Message[]) {
   return trace.map((m) => {
