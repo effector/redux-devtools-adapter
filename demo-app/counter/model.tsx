@@ -4,6 +4,7 @@ import {
   createEffect,
   sample,
   combine,
+  split,
 } from "effector";
 
 export const buttonClicked = createEvent();
@@ -37,4 +38,14 @@ sample({
   source: $counter,
   fn: (c) => c + 5,
   target: $counter,
+});
+
+const sampledEvent = sample({
+  source: {
+    count: $counter,
+    ref: $ref,
+  },
+  clock: [someSideEffectFx.done, someOtherEffectFx.done],
+  filter: ({ ref }) => ref.count % 2 === 0,
+  fn: ({ count }) => `${count}_kek`,
 });
