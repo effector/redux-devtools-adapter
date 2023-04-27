@@ -85,17 +85,18 @@ function createReporter(state: Record<string, unknown>) {
     if (isEffectCall(m)) {
       const name = getName(m);
       fxIdMap.set(m.stack.fxID, name);
-      updateInFlight(state, name, 1);
       return {
         type: `[effect] ${m.name || "unknown"}`,
         params: m.value,
       };
     }
 
+    if (isEffectInFlight(m)) {
+      saveStoreUpdate(state, m);
+    }
+
     if (isEffectFinally(m)) {
       const name = fxIdMap.get(m.stack.fxID)!;
-
-      updateInFlight(state, name, -1);
 
       if ((m.value as any).status === "done") {
         return {
@@ -170,16 +171,13 @@ function isEffectCall(m: Message) {
 function isEffectFinally(m: Message) {
   return m.kind === "event" && m.meta.named === "finally";
 }
-function updateInFlight(
-  state: Record<string, unknown>,
-  name: string,
-  up: number
-) {
-  const inFlightName = `${name}.inFlight`;
-  const inFlight = (state[inFlightName] as number) || 0;
-  state[inFlightName] = inFlight + up;
+function isEffectInFlight(m: Message) {
+  return (
+    m.kind === "store" &&
+    !m.meta.derived &&
+    (m.meta as any)?.named?.endsWith("inFlight")
+  );
 }
-
 // stores
 function isStoreUpdate(m: Message) {
   return m.kind === "store" && !m.meta.derived && !isEffectorInternal(m);
