@@ -134,6 +134,12 @@ function createReporter(state: Record<string, unknown>) {
     }
 
     // events
+    if (isSplitEvent(m)) {
+      return {
+        type: `[event] ${getName(m)}`,
+        params: m.value,
+      };
+    }
     if (isEvent(m)) {
       return {
         type: `[event] ${getName(m)}`,
@@ -189,6 +195,9 @@ function saveStoreUpdate(state: Record<string, unknown>, m: Message) {
 // events
 function isEvent(m: Message) {
   return m.kind === "event" && !m.meta.derived && !isEffectorInternal(m);
+}
+function isSplitEvent(m: Message) {
+  return m.kind === "event" && (m.meta as any)?.named?.startsWith("cases.");
 }
 
 // operators
