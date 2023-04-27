@@ -80,7 +80,6 @@ const fxIdMap = new Map<unknown, string>();
 
 function createReporter(state: Record<string, unknown>) {
   return (m: Message): Record<string, unknown> | void => {
-    console.log(m);
     // effects
     if (isEffectCall(m)) {
       const name = getName(m);
