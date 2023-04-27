@@ -49,3 +49,23 @@ const sampledEvent = sample({
   filter: ({ ref }) => ref.count % 2 === 0,
   fn: ({ count }) => `${count}_kek`,
 });
+
+const a = createEvent<string>();
+const b = createEvent<string>();
+
+split({
+  source: sampledEvent,
+  match: {
+    a: (kek) => parseInt(kek.split("_")[0]) % 2 === 0,
+    b: (_kek) => true,
+  },
+  cases: {
+    a,
+    b,
+  },
+});
+
+const { aaa, bbb } = split(sampledEvent, {
+  aaa: (kek) => parseInt(kek.split("_")[0]) % 2 === 0,
+  bbb: (_kek) => true,
+});
