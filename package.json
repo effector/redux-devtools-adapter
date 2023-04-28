@@ -9,6 +9,7 @@
   "publishConfig": {
     "access": "public"
   },
+  "packageManager": "pnpm@8.1.1",
   "type": "module",
   "module": "./dist/index.js",
   "exports": {
