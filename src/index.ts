@@ -1,5 +1,5 @@
 import { Message, inspect } from "effector/inspect";
-import type { Scope } from "effector";
+import type { Node, Scope } from "effector";
 
 const devTools = (window as any).__REDUX_DEVTOOLS_EXTENSION__;
 let id = 0;
@@ -29,7 +29,7 @@ export function attachReduxDevTools({
   /**
    * Supports Redux DevTools Extension's time-travel
    *
-   * Works only with `scope` provided, maybe buggy
+   * Works only with `scope` provided. Maybe buggy or not even work at all.
    */
   timeTravel?: boolean;
   /**
@@ -280,16 +280,20 @@ function attachTimeTravel(
     return () => {};
   }
 
+  const debouncedScopeUpdate = debounce((messageState: any) => {
+    console.log("updated scope");
+    const state = JSON.parse(messageState)[STATE_KEY];
+    if (state) {
+      HACK_injectOldReg(scope, state);
+    }
+  }, 100);
   const unsub = devToolsController.subscribe((message: any) => {
     if (message.id === instanceId) {
       if (
         message.type === "DISPATCH" &&
         message.payload?.type === "JUMP_TO_ACTION"
       ) {
-        const state = JSON.parse(message.state)[STATE_KEY];
-        if (state) {
-          HACK_injectOldReg(scope, state);
-        }
+        debouncedScopeUpdate(message.state);
       }
     }
   });
@@ -309,4 +313,29 @@ function saveTimeTravelData(scope: Scope, state: Record<string, unknown>) {
 
 function HACK_injectOldReg(scope: Scope, reg: any) {
   (scope as any).reg = reg;
+
+  HACK_rerunSubscribers(scope);
+}
+
+function HACK_rerunSubscribers(scope: Scope) {
+  const linkOwners = (scope as any).additionalLinks;
+
+  Object.values(linkOwners).forEach((links: any) => {
+    links.forEach((link: any) => {
+      const node = link as Node;
+      console.log(node);
+      // @ts-expect-error
+      node.seq[1].data?.fn();
+    });
+  });
+}
+
+function debounce(cb: (...args: any[]) => void, ms: number) {
+  let timeout: any;
+  return (...args: any[]) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      cb(...args);
+    }, ms);
+  };
 }
