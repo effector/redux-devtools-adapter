@@ -1,17 +1,20 @@
 import { Message, inspect } from "effector/inspect";
-import type { Scope } from "effector";
+import type { Node, Scope } from "effector";
 
 const devTools = (window as any).__REDUX_DEVTOOLS_EXTENSION__;
+let id = 0;
+const getId = () => `effector_${id++}`;
 
 export function attachReduxDevTools({
   scope,
   name,
   trace,
   devToolsConfig,
+  timeTravel,
 }: {
   /**
    * Effector's Scope, which calculations and state will be inspected
-   * 
+   *
    * If not provided, the default "no-scope" calculations will be tracked
    */
   scope?: Scope;
@@ -23,6 +26,12 @@ export function attachReduxDevTools({
    * Adds trace of effector calculations to every log
    */
   trace?: boolean;
+  /**
+   * Supports Redux DevTools Extension's time-travel
+   *
+   * Works only with `scope` provided. Maybe buggy or not even work at all.
+   */
+  timeTravel?: boolean;
   /**
    * Redux DevTools extension config
    * @see https://github.com/reduxjs/redux-devtools/blob/main/extension/docs/API/Arguments.md
@@ -39,9 +48,11 @@ export function attachReduxDevTools({
 } = {}): () => void {
   if (!devTools) return fallback();
 
+  const id = getId();
   const state = {};
   const controller = devTools.connect({
     name: getInstanceName(name),
+    instanceId: id,
     ...devToolsConfig,
   });
   controller.init(state);
@@ -61,12 +72,19 @@ export function attachReduxDevTools({
           act.loc = m.loc;
         }
 
+        if (timeTravel && scope) {
+          saveTimeTravelData(scope, state);
+        }
+
         controller.send(act, { ...state });
       }
     },
   });
 
+  const unTimeTravel = attachTimeTravel(controller, scope, timeTravel, id);
+
   return () => {
+    unTimeTravel();
     uninspect();
   };
 }
@@ -242,4 +260,81 @@ function readTrace(trace: Message[]) {
 /**
  * Expiremental time-travel feature, works only for Scopes
  */
+const STATE_KEY = "__effector_time_travel_state__";
+function attachTimeTravel(
+  devToolsController: any,
+  scope?: Scope,
+  enabled?: boolean,
+  /**
+   * Redux devtools sends all messages from all instances into all `subscribe` callbacks.
+   *
+   * To avoid accidental mixing of different instances we need to check for instanceId first.
+   */
+  instanceId?: string
+): () => void {
+  if (!enabled) return () => {};
+  if (!scope) {
+    console.error(
+      "Redux DevTools Time travel works only for Effector's Scopes"
+    );
+    return () => {};
+  }
 
+  const debouncedScopeUpdate = debounce((messageState: any) => {
+    const state = JSON.parse(messageState)[STATE_KEY];
+    if (state) {
+      HACK_injectOldReg(scope, state);
+    }
+  }, 100);
+  const unsub = devToolsController.subscribe((message: any) => {
+    if (message.id === instanceId) {
+      if (
+        message.type === "DISPATCH" &&
+        message.payload?.type === "JUMP_TO_ACTION"
+      ) {
+        debouncedScopeUpdate(message.state);
+      }
+    }
+  });
+
+  return () => {
+    unsub();
+  };
+}
+
+function saveTimeTravelData(scope: Scope, state: Record<string, unknown>) {
+  const reg = {
+    ...(scope as any).reg,
+  };
+
+  state[STATE_KEY] = reg;
+}
+
+function HACK_injectOldReg(scope: Scope, reg: any) {
+  (scope as any).reg = reg;
+
+  HACK_rerunSubscribers(scope);
+}
+
+function HACK_rerunSubscribers(scope: Scope) {
+  const linkOwners = (scope as any).additionalLinks;
+
+  Object.values(linkOwners).forEach((links: any) => {
+    links.forEach((link: any) => {
+      const node = link as Node;
+      console.log(node);
+      // @ts-expect-error
+      node.seq[1].data?.fn();
+    });
+  });
+}
+
+function debounce(cb: (...args: any[]) => void, ms: number) {
+  let timeout: any;
+  return (...args: any[]) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      cb(...args);
+    }, ms);
+  };
+}
