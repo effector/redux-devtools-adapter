@@ -121,28 +121,22 @@ function createReporter(state: Record<string, unknown>) {
     if (isStoreUpdate(m)) {
       saveStoreUpdate(state, m);
       return {
-        type: `[store] ${getName(m)}`,
+        type: `🧳 [store] ${getName(m)}`,
         value: m.value,
       };
     }
     if (isCombineUpdate(m)) {
       saveStoreUpdate(state, m);
       return {
-        type: `🤹‍♂️ [combine] ${getName(m)}`,
+        type: `🥗 [combine] ${getName(m)}`,
         value: m.value,
       };
     }
 
     // events
-    if (isSplitEvent(m)) {
+    if (isEvent(m) || isSplitEvent(m)) {
       return {
-        type: `[event] ${getName(m)}`,
-        params: m.value,
-      };
-    }
-    if (isEvent(m)) {
-      return {
-        type: `[event] ${getName(m)}`,
+        type: `⭐️ [event] ${getName(m)}`,
         params: m.value,
       };
     }
@@ -150,7 +144,7 @@ function createReporter(state: Record<string, unknown>) {
     // operators
     if (isSample(m)) {
       return {
-        type: `[${m.kind}] ${getSampleName(m)}`,
+        type: `⏰ [${m.kind}] ${getSampleName(m)}`,
         value: m.value,
       };
     }
