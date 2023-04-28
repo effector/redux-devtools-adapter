@@ -4,6 +4,9 @@ on:
   release:
     types: [published]
 
+permissions:
+  id-token: write
+
 jobs:
   publish-to-npm:
     runs-on: ubuntu-22.04
@@ -44,4 +47,4 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: 🚀 Publish package
-        run: npm publish
+        run: npm publish --provenance
