@@ -129,6 +129,7 @@ function createReporter(state: Record<string, unknown>) {
 
     if (isEffectFinally(m)) {
       const name = fxIdMap.get(m.stack.fxID)!;
+      fxIdMap.delete(m.stack.fxID);
 
       if ((m.value as any).status === "done") {
         return {
