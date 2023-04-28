@@ -1,11 +1,14 @@
 {
   "name": "@effector/redux-devtools-adapter",
-  "version": "0.1.0",
+  "version": "0.0.0-real-version-will-be-set-on-ci",
   "description": "Simple adapter to connect Effector's Inspect API to Redux DevTools",
   "repository": "git@github.com:effector/redux-devtools-adapter.git",
   "author": "AlexandrHoroshih <xad71rus@gmail.com>",
   "license": "MIT",
   "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "module": "./dist/index.js",
   "exports": {
