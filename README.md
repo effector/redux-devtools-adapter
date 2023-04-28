@@ -12,6 +12,32 @@ yarn add -D @effector/redux-devtools-adapter
 
 ## Usage
 
+### Prepare metadata
+
+To make logs more useful we need additional metadata (like names, locations in the code, etc), which is provided by one of the `effector` plugins.
+
+#### Babel-plugin
+
+Babel-plugin is built-in in the `effector` package.
+
+Just add it to your babel configuration.
+```json
+{
+  "plugins": ["effector/babel-plugin"]
+}
+```
+
+[Read the docs](https://effector.dev/docs/api/effector/babel-plugin/#usage)
+
+#### SWC Plugin
+
+[Read effector SWC plugin documentation](https://github.com/effector/swc-plugin)
+
+### In the code
+
+Just call `attachReduxDevTools` somewhere in your project's entrypoint.
+
+Example:
 ```ts
 import { attachReduxDevTools } from "@effector/redux-devtools-adapter";
 
