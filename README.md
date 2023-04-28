@@ -2,8 +2,6 @@
 
 Simple adapter to connect Effector's Inspect API to Redux DevTools, extracted from the old `effector-logger` project.
 
-Work in progress, package is not available in the npm yet.
-
 ## Installation
 
 ```sh
@@ -35,9 +33,9 @@ Just add it to your babel configuration.
 
 ### In the code
 
-Just call `attachReduxDevTools` somewhere in your project's entrypoint.
+Just call `attachReduxDevTools()` somewhere in your project's entrypoint.
 
-Example:
+You can also provide some additional configuration. Example:
 ```ts
 import { attachReduxDevTools } from "@effector/redux-devtools-adapter";
 
