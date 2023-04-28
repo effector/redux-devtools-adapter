@@ -5,7 +5,6 @@ import { CounterView } from "./counter";
 
 export const scopeOne = fork();
 export const scopeTwo = fork();
-export const scopeThree = fork();
 
 export function App() {
   return (
@@ -23,12 +22,6 @@ export function App() {
       <div>
         <h1>With Scope 2 (traces)</h1>
         <Provider value={scopeTwo}>
-          <CounterView />
-        </Provider>
-      </div>
-      <div>
-        <h1>With Scope 3 (time-travel)</h1>
-        <Provider value={scopeThree}>
           <CounterView />
         </Provider>
       </div>
