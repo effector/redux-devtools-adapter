@@ -22,6 +22,7 @@ attachReduxDevTools({
    * ☝️ (optional) effector's Scope, if you use it
    *
    * @see https://effector.dev/docs/api/effector/scope/
+   * @see https://dev.to/effector/the-best-part-of-effector-4c27
    */
   trace: true,
   /**
