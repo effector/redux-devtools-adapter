@@ -28,11 +28,6 @@ attachReduxDevTools({
   /**
    * ☝️ enables traces of effector's calculations for every log. `false` by default
    */
-  timeTravel,
-  /**
-   *  ☝️ enables Redux DevTools time travel integration.
-   * Works only with scope provided, does not work for "scope-less" apps.
-   */
   devToolsConfig,
   /**
    *
