@@ -9,9 +9,24 @@ export function attachReduxDevTools({
   trace,
   devToolsConfig,
 }: {
+  /**
+   * Effector's Scope, which calculations and state will be inspected
+   * 
+   * If not provided, the default "no-scope" calculations will be tracked
+   */
   scope?: Scope;
-  name: string;
+  /**
+   * Context name to show in the redux devtools
+   */
+  name?: string;
+  /**
+   * Adds trace of effector calculations to every log
+   */
   trace?: boolean;
+  /**
+   * Redux DevTools extension config
+   * @see https://github.com/reduxjs/redux-devtools/blob/main/extension/docs/API/Arguments.md
+   */
   devToolsConfig?: {
     maxAge?: number;
     latency?: number;
@@ -21,7 +36,7 @@ export function attachReduxDevTools({
           replacer?: (key: string, value: any) => any;
         };
   };
-}): () => void {
+} = {}): () => void {
   if (!devTools) return fallback();
 
   const state = {};
@@ -64,7 +79,7 @@ function fallback() {
   return unsub;
 }
 
-function getInstanceName(name: string): string {
+function getInstanceName(name?: string): string {
   if (name) {
     return `☄️ ${name}`;
   }
@@ -222,3 +237,9 @@ function readTrace(trace: Message[]) {
     };
   });
 }
+
+// time-travel
+/**
+ * Expiremental time-travel feature, works only for Scopes
+ */
+
