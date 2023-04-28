@@ -281,7 +281,6 @@ function attachTimeTravel(
   }
 
   const debouncedScopeUpdate = debounce((messageState: any) => {
-    console.log("updated scope");
     const state = JSON.parse(messageState)[STATE_KEY];
     if (state) {
       HACK_injectOldReg(scope, state);
