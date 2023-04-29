@@ -2,6 +2,8 @@
 
 Simple adapter to connect Effector's Inspect API to Redux DevTools, extracted from the old `effector-logger` project.
 
+<img width="1512" alt="image" src="https://user-images.githubusercontent.com/32790736/235296652-b74df685-c436-45c1-911e-7a6e99e78770.png">
+
 ## Installation
 
 ```sh
