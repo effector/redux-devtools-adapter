@@ -39,14 +39,15 @@ export function attachReduxDevTools({
 
   if (!devTools) return fallback();
 
-  const state = {};
+  const stateControls = createState();
+  const { state } = stateControls;
   const controller = devTools.connect({
     name: getInstanceName(name),
     ...devToolsConfig,
   });
   controller.init(state);
 
-  const report = createReporter(state);
+  const report = createReporter(stateControls);
 
   const uninspect = inspect({
     scope,
@@ -65,7 +66,7 @@ export function attachReduxDevTools({
          * Providing each log with entity id,
          * so it is easier to debug updates of units with similar or equal names
          */
-        act.id = m.id
+        act.id = m.id;
 
         controller.send(act, { ...state });
       }
@@ -99,7 +100,7 @@ function getInstanceName(name?: string): string {
 // reporting
 const fxIdMap = new Map<unknown, string>();
 
-function createReporter(state: Record<string, unknown>) {
+function createReporter(state: ReturnType<typeof createState>) {
   return (m: Message): Record<string, unknown> | void => {
     // effects
     if (isEffectCall(m)) {
@@ -112,7 +113,7 @@ function createReporter(state: Record<string, unknown>) {
     }
 
     if (isEffectInFlight(m)) {
-      saveStoreUpdate(state, m);
+      state.saveStoreUpdate(m);
     }
 
     if (isEffectFinally(m)) {
@@ -141,14 +142,14 @@ function createReporter(state: Record<string, unknown>) {
 
     // stores
     if (isStoreUpdate(m)) {
-      saveStoreUpdate(state, m);
+      state.saveStoreUpdate(m);
       return {
         type: `🧳 [store] ${getName(m)}`,
         value: m.value,
       };
     }
     if (isCombineUpdate(m)) {
-      saveStoreUpdate(state, m);
+      state.saveStoreUpdate(m);
       return {
         type: `🥗 [combine] ${getName(m)}`,
         value: m.value,
@@ -200,10 +201,6 @@ function isStoreUpdate(m: Message) {
 function isCombineUpdate(m: Message) {
   return m.kind === "store" && m.meta.isCombine && !isEffectorInternal(m);
 }
-function saveStoreUpdate(state: Record<string, unknown>, m: Message) {
-  const name = getName(m);
-  state[name] = m.value;
-}
 
 // events
 function isEvent(m: Message) {
@@ -243,6 +240,32 @@ function readTrace(trace: Message[]) {
       value: m.value,
     };
   });
+}
+function createState() {
+  const nameToId = {} as Record<string, string>;
+  const state = {} as Record<string, unknown>;
+
+  function saveStoreUpdate(m: Message) {
+    let name = getName(m);
+
+    if (nameToId[name] && nameToId[name] !== m.id) {
+      /**
+       * In case of name intersection we add id to the name
+       */
+      name = `${name} (${m.id})`;
+    }
+
+    if (!nameToId[name]) {
+      nameToId[name] = m.id;
+    }
+
+    state[name] = m.value;
+  }
+
+  return {
+    state,
+    saveStoreUpdate,
+  };
 }
 
 function getDevTools() {

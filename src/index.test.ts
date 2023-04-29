@@ -104,7 +104,8 @@ describe("Redux DevTools Effector adapter", () => {
             "value": "pekkek",
           },
           {
-            "$counter": "pekkek",
+            "$counter": 1,
+            "$counter (81)": "pekkek",
           },
         ],
         [
@@ -145,7 +146,8 @@ describe("Redux DevTools Effector adapter", () => {
             },
           },
           {
-            "$counter": "pekkek",
+            "$counter": 1,
+            "$counter (81)": "pekkek",
             "$ref": {
               "count": 1,
             },
@@ -190,7 +192,8 @@ describe("Redux DevTools Effector adapter", () => {
             },
           },
           {
-            "$counter": "pekkek",
+            "$counter": 1,
+            "$counter (81)": "pekkek",
             "$ref": {
               "count": 1,
             },
@@ -215,7 +218,8 @@ describe("Redux DevTools Effector adapter", () => {
             "type": "⭐️ [event] buttonClicked",
           },
           {
-            "$counter": "pekkek",
+            "$counter": 1,
+            "$counter (81)": "pekkek",
             "$ref": {
               "count": 1,
             },
@@ -252,6 +256,7 @@ describe("Redux DevTools Effector adapter", () => {
           },
           {
             "$counter": 2,
+            "$counter (81)": "pekkek",
             "$ref": {
               "count": 1,
             },
@@ -287,7 +292,8 @@ describe("Redux DevTools Effector adapter", () => {
             "value": "kekpek",
           },
           {
-            "$counter": "kekpek",
+            "$counter": 2,
+            "$counter (81)": "kekpek",
             "$ref": {
               "count": 1,
             },
@@ -337,7 +343,8 @@ describe("Redux DevTools Effector adapter", () => {
             },
           },
           {
-            "$counter": "kekpek",
+            "$counter": 2,
+            "$counter (81)": "kekpek",
             "$ref": {
               "count": 2,
             },
@@ -388,7 +395,8 @@ describe("Redux DevTools Effector adapter", () => {
             },
           },
           {
-            "$counter": "kekpek",
+            "$counter": 2,
+            "$counter (81)": "kekpek",
             "$ref": {
               "count": 2,
             },
@@ -453,7 +461,8 @@ describe("Redux DevTools Effector adapter", () => {
             "value": 2,
           },
           {
-            "$counter": "kekpek",
+            "$counter": 2,
+            "$counter (81)": "kekpek",
             "$ref": {
               "count": 2,
             },
@@ -523,7 +532,8 @@ describe("Redux DevTools Effector adapter", () => {
             "type": "☄️ [effect] someSideEffectFx",
           },
           {
-            "$counter": "kekpek",
+            "$counter": 2,
+            "$counter (81)": "kekpek",
             "$ref": {
               "count": 2,
             },
@@ -593,7 +603,8 @@ describe("Redux DevTools Effector adapter", () => {
             "type": "☄️ [effect] someOtherEffectFx",
           },
           {
-            "$counter": "kekpek",
+            "$counter": 2,
+            "$counter (81)": "kekpek",
             "$ref": {
               "count": 2,
             },
@@ -615,7 +626,8 @@ describe("Redux DevTools Effector adapter", () => {
             "type": "✅ [effect] someOtherEffectFx.done",
           },
           {
-            "$counter": "kekpek",
+            "$counter": 2,
+            "$counter (81)": "kekpek",
             "$ref": {
               "count": 2,
             },
@@ -684,7 +696,8 @@ describe("Redux DevTools Effector adapter", () => {
             "value": "2_kek",
           },
           {
-            "$counter": "kekpek",
+            "$counter": 2,
+            "$counter (81)": "kekpek",
             "$ref": {
               "count": 2,
             },
@@ -768,7 +781,8 @@ describe("Redux DevTools Effector adapter", () => {
             "type": "⭐️ [event] a",
           },
           {
-            "$counter": "kekpek",
+            "$counter": 2,
+            "$counter (81)": "kekpek",
             "$ref": {
               "count": 2,
             },
@@ -857,7 +871,8 @@ describe("Redux DevTools Effector adapter", () => {
             "value": "2_kek",
           },
           {
-            "$counter": "kekpek",
+            "$counter": 2,
+            "$counter (81)": "kekpek",
             "$ref": {
               "count": 2,
             },
@@ -941,7 +956,8 @@ describe("Redux DevTools Effector adapter", () => {
             "value": "2_kek",
           },
           {
-            "$counter": "kekpek",
+            "$counter": 2,
+            "$counter (81)": "kekpek",
             "$ref": {
               "count": 2,
             },
@@ -1035,7 +1051,8 @@ describe("Redux DevTools Effector adapter", () => {
             "type": "⭐️ [event] b",
           },
           {
-            "$counter": "kekpek",
+            "$counter": 2,
+            "$counter (81)": "kekpek",
             "$ref": {
               "count": 2,
             },
@@ -1119,7 +1136,8 @@ describe("Redux DevTools Effector adapter", () => {
             "type": "⭐️ [event] cases.aaa",
           },
           {
-            "$counter": "kekpek",
+            "$counter": 2,
+            "$counter (81)": "kekpek",
             "$ref": {
               "count": 2,
             },
@@ -1208,7 +1226,8 @@ describe("Redux DevTools Effector adapter", () => {
             "value": "2_kek",
           },
           {
-            "$counter": "kekpek",
+            "$counter": 2,
+            "$counter (81)": "kekpek",
             "$ref": {
               "count": 2,
             },
@@ -1231,7 +1250,8 @@ describe("Redux DevTools Effector adapter", () => {
             "type": "✅ [effect] someSideEffectFx.done",
           },
           {
-            "$counter": "kekpek",
+            "$counter": 2,
+            "$counter (81)": "kekpek",
             "$ref": {
               "count": 2,
             },
@@ -1300,7 +1320,8 @@ describe("Redux DevTools Effector adapter", () => {
             "value": "2_kek",
           },
           {
-            "$counter": "kekpek",
+            "$counter": 2,
+            "$counter (81)": "kekpek",
             "$ref": {
               "count": 2,
             },
@@ -1384,7 +1405,8 @@ describe("Redux DevTools Effector adapter", () => {
             "type": "⭐️ [event] a",
           },
           {
-            "$counter": "kekpek",
+            "$counter": 2,
+            "$counter (81)": "kekpek",
             "$ref": {
               "count": 2,
             },
@@ -1473,7 +1495,8 @@ describe("Redux DevTools Effector adapter", () => {
             "value": "2_kek",
           },
           {
-            "$counter": "kekpek",
+            "$counter": 2,
+            "$counter (81)": "kekpek",
             "$ref": {
               "count": 2,
             },
@@ -1557,7 +1580,8 @@ describe("Redux DevTools Effector adapter", () => {
             "value": "2_kek",
           },
           {
-            "$counter": "kekpek",
+            "$counter": 2,
+            "$counter (81)": "kekpek",
             "$ref": {
               "count": 2,
             },
@@ -1651,7 +1675,8 @@ describe("Redux DevTools Effector adapter", () => {
             "type": "⭐️ [event] b",
           },
           {
-            "$counter": "kekpek",
+            "$counter": 2,
+            "$counter (81)": "kekpek",
             "$ref": {
               "count": 2,
             },
@@ -1735,7 +1760,8 @@ describe("Redux DevTools Effector adapter", () => {
             "type": "⭐️ [event] cases.aaa",
           },
           {
-            "$counter": "kekpek",
+            "$counter": 2,
+            "$counter (81)": "kekpek",
             "$ref": {
               "count": 2,
             },
@@ -1824,7 +1850,8 @@ describe("Redux DevTools Effector adapter", () => {
             "value": "2_kek",
           },
           {
-            "$counter": "kekpek",
+            "$counter": 2,
+            "$counter (81)": "kekpek",
             "$ref": {
               "count": 2,
             },
