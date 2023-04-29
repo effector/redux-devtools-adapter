@@ -1,11 +1,19 @@
 import { Message, inspect } from "effector/inspect";
-import type { Scope } from "effector";
+import type { Scope, Show } from "effector";
+
+type LogsQueueSettings =
+  | boolean
+  | {
+      maxAge?: number;
+      latency?: number;
+    };
 
 export function attachReduxDevTools({
   scope,
   name,
   trace,
   devToolsConfig,
+  batch = true,
 }: {
   /**
    * Effector's Scope, which calculations and state will be inspected
@@ -17,6 +25,13 @@ export function attachReduxDevTools({
    * Context name to show in the redux devtools
    */
   name?: string;
+  /**
+   * Log batching settings, performed at the adapter side,
+   * since redux devtools are trying to show each and every log - which may be perf issue
+   *
+   * Default: `true` - enables batching with default settings `maxAge: 50` and `latency: 500` - just like Redux DevTools defaults
+   */
+  batch?: Show<LogsQueueSettings>;
   /**
    * Adds trace of effector calculations to every log
    */
@@ -49,6 +64,8 @@ export function attachReduxDevTools({
 
   const report = createReporter(stateControls);
 
+  const log = createBatcher(controller, state, batch);
+
   const uninspect = inspect({
     scope,
     trace,
@@ -68,7 +85,7 @@ export function attachReduxDevTools({
          */
         act.id = m.id;
 
-        controller.send(act, { ...state });
+        log(act);
       }
     },
   });
@@ -283,4 +300,61 @@ function getDevTools() {
   const devTools = globals.__REDUX_DEVTOOLS_EXTENSION__;
 
   return devTools;
+}
+
+// logs queue
+type Settings = Required<Exclude<LogsQueueSettings, boolean>>;
+const defaults: Settings = {
+  maxAge: 50,
+  latency: 500,
+};
+function createBatcher(
+  devToolsController: any,
+  state: Record<string, unknown>,
+  settings?: LogsQueueSettings
+) {
+  if (!settings)
+    return (log: Record<string, unknown>) =>
+      devToolsController.send(log, { ...state });
+
+  const { maxAge, latency } =
+    typeof settings === "object" ? { ...defaults, ...settings } : defaults;
+
+  let queue = [] as {
+    log: Record<string, unknown>;
+    state: Record<string, unknown>;
+  }[];
+
+  const getCurrentQueue = () => queue;
+
+  const flushQueue = debounce(() => {
+    const currentQueue = getCurrentQueue();
+    while (currentQueue.length) {
+      const item = currentQueue.shift();
+      if (item) {
+        devToolsController.send(item.log, item.state);
+      }
+    }
+    queue = [];
+  }, latency);
+
+  return (log: Record<string, unknown>) => {
+    queue.push({ log, state: Object.assign({}, state) });
+
+    if (queue.length === maxAge) {
+      queue.shift();
+    }
+
+    flushQueue();
+  };
+}
+
+function debounce(cb: () => void, ms: number) {
+  let timeout: any;
+  return () => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      cb();
+    }, ms);
+  };
 }

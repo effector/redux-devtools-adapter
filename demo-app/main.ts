@@ -12,8 +12,9 @@ attachReduxDevTools({
 });
 
 attachReduxDevTools({
-  name: "Demo app (scope)",
+  name: "Demo app (scope + batch)",
   scope: scopeOne,
+  batch: true,
 });
 
 attachReduxDevTools({
