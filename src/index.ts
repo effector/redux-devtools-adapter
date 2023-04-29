@@ -1,7 +1,10 @@
 import { Message, inspect } from "effector/inspect";
 import type { Scope } from "effector";
 
-const devTools = (window as any).__REDUX_DEVTOOLS_EXTENSION__;
+const globals = (
+  typeof globalThis !== "undefined" ? globalThis : window
+) as any;
+const devTools = globals.__REDUX_DEVTOOLS_EXTENSION__;
 
 export function attachReduxDevTools({
   scope,
