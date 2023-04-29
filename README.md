@@ -43,14 +43,21 @@ It is also useful to enable `loc` generation for dev environment, to see for exa
 
 ### In the code
 
-Just call `attachReduxDevTools()` somewhere in your project's entrypoint.
+Just call `attachReduxDevTools()` somewhere in your project's entrypoint and you are good to go.
+
+```ts
+// e.g. src/main.ts
+import { attachReduxDevTools } from "@effector/redux-devtools-adapter";
+
+attachReduxDevTools()
+```
 
 You can also provide some additional configuration. Example:
 ```ts
 import { attachReduxDevTools } from "@effector/redux-devtools-adapter";
 
 attachReduxDevTools({
-  name: "Name of your app, will be visible in the Redux DevTools",
+  name: "(Optional) Name of your app, will be visible in the Redux DevTools",
   scope,
   /**
    * ☝️ (optional) effector's Scope, if you use it
@@ -60,7 +67,7 @@ attachReduxDevTools({
    */
   trace: true,
   /**
-   * ☝️ enables traces of effector's calculations for every log. `false` by default
+   * ☝️ enables traces of effector's calculations for every log. Optional, `false` by default
    */
   devToolsConfig,
   /**
