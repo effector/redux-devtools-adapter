@@ -5,6 +5,8 @@ import { attachReduxDevTools } from "../";
 import { App, scopeOne, scopeTwo } from "./app";
 import { createElement } from "react";
 
+attachReduxDevTools();
+
 attachReduxDevTools({
   name: "Demo App",
 });
