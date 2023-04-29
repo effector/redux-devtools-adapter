@@ -102,6 +102,17 @@ const fxIdMap = new Map<unknown, string>();
 
 function createReporter(state: ReturnType<typeof createState>) {
   return (m: Message): Record<string, unknown> | void => {
+    // errors
+    if (m.type === "error") {
+      return {
+        type: `⛔️ [error] [${m.kind}] ${getName(m)}`,
+        explanation: "Error in pure function, branch computation stopped",
+        name: getName(m),
+        value: m.value,
+        error: (m?.error as any)?.message ? (m.error as any)!.message : m.error,
+      };
+    }
+
     // effects
     if (isEffectCall(m)) {
       const name = getName(m);
@@ -167,7 +178,7 @@ function createReporter(state: ReturnType<typeof createState>) {
     // operators
     if (isSample(m)) {
       return {
-        type: `⏰ [${m.kind}] ${getSampleName(m)}`,
+        type: `⏰ [${m.kind}] ${getName(m)}`,
         value: m.value,
       };
     }
@@ -223,9 +234,6 @@ function isEffectorInternal(m: Message) {
   return !!m.meta.named;
 }
 function getName(m: Message) {
-  return m.name || `unknown_${m.id}`;
-}
-function getSampleName(m: Message) {
   return m.name || locToString(m.loc) || `unknown_${m.id}`;
 }
 function locToString(loc: any) {

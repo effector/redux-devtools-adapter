@@ -67,6 +67,20 @@ split({
   },
 });
 
+const somethingHappened = createEvent();
+sample({
+  clock: $counter,
+  fn: (c) => {
+    console.log(c)
+    if (c === 4) {
+      throw Error("Oh no!");
+    }
+
+    return c;
+  },
+  target: somethingHappened,
+});
+
 const { aaa, bbb } = split(sampledEvent, {
   aaa: (kek) => parseInt(kek.split("_")[0]) % 2 === 0,
   bbb: (_kek) => true,
