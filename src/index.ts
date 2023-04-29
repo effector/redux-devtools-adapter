@@ -1,11 +1,6 @@
 import { Message, inspect } from "effector/inspect";
 import type { Scope } from "effector";
 
-const globals = (
-  typeof globalThis !== "undefined" ? globalThis : window
-) as any;
-const devTools = globals.__REDUX_DEVTOOLS_EXTENSION__;
-
 export function attachReduxDevTools({
   scope,
   name,
@@ -40,6 +35,8 @@ export function attachReduxDevTools({
         };
   };
 } = {}): () => void {
+  const devTools = getDevTools();
+
   if (!devTools) return fallback();
 
   const state = {};
@@ -240,4 +237,13 @@ function readTrace(trace: Message[]) {
       value: m.value,
     };
   });
+}
+
+function getDevTools() {
+  const globals = (
+    typeof globalThis !== "undefined" ? globalThis : window
+  ) as any;
+  const devTools = globals.__REDUX_DEVTOOLS_EXTENSION__;
+
+  return devTools;
 }
