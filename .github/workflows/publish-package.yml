@@ -26,6 +26,9 @@ jobs:
       - name: 🔍 Install dependencies
         run: pnpm install
 
+      - name: 🔧 Test package
+        run: pnpm test
+
       - name: 🔧 Build package
         run: pnpm build
 
