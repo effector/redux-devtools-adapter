@@ -25,6 +25,14 @@ Just add it to your babel configuration.
 }
 ```
 
+It is also useful to enable `loc` generation for dev environment, to see for exact locations of `sample`s and other operators in the code.
+
+```json
+{
+  "plugins": [["effector/babel-plugin", { "addLoc": true }]]
+}
+```
+
 [Read the docs](https://effector.dev/docs/api/effector/babel-plugin/#usage)
 
 #### SWC Plugin

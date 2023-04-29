@@ -14,7 +14,7 @@ export default defineConfig({
   plugins: [
     react({
       babel: {
-        plugins: ["effector/babel-plugin"],
+        plugins: [["effector/babel-plugin", { addLoc: true }]],
       },
     }),
   ],
