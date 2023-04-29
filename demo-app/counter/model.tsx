@@ -82,3 +82,10 @@ guard({
   filter: () => false,
   target: b,
 });
+
+// duplicated store value
+{
+  const $counter = createStore("kekpek").on(buttonClicked, (s) =>
+    s === "kekpek" ? "pekkek" : "kekpek"
+  );
+}
