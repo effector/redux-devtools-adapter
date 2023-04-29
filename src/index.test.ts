@@ -41,6 +41,7 @@ describe("Redux DevTools Effector adapter", () => {
       [
         [
           {
+            "id": "2",
             "loc": {
               "column": 29,
               "file": "/demo-app/counter/model.tsx",
@@ -54,6 +55,7 @@ describe("Redux DevTools Effector adapter", () => {
         ],
         [
           {
+            "id": "4",
             "loc": {
               "column": 24,
               "file": "/demo-app/counter/model.tsx",
@@ -80,6 +82,34 @@ describe("Redux DevTools Effector adapter", () => {
         ],
         [
           {
+            "id": "81",
+            "loc": {
+              "column": 19,
+              "file": "/demo-app/counter/model.tsx",
+              "line": 88,
+            },
+            "trace": [
+              {
+                "name": undefined,
+                "type": "on",
+                "value": "pekkek",
+              },
+              {
+                "name": "buttonClicked",
+                "type": "event",
+                "value": undefined,
+              },
+            ],
+            "type": "🧳 [store] $counter",
+            "value": "pekkek",
+          },
+          {
+            "$counter": "pekkek",
+          },
+        ],
+        [
+          {
+            "id": "55",
             "loc": {
               "column": 13,
               "file": "/demo-app/counter/model.tsx",
@@ -115,7 +145,7 @@ describe("Redux DevTools Effector adapter", () => {
             },
           },
           {
-            "$counter": 1,
+            "$counter": "pekkek",
             "$ref": {
               "count": 1,
             },
@@ -123,6 +153,7 @@ describe("Redux DevTools Effector adapter", () => {
         ],
         [
           {
+            "id": "63",
             "trace": [
               {
                 "name": undefined,
@@ -159,7 +190,7 @@ describe("Redux DevTools Effector adapter", () => {
             },
           },
           {
-            "$counter": 1,
+            "$counter": "pekkek",
             "$ref": {
               "count": 1,
             },
@@ -173,6 +204,7 @@ describe("Redux DevTools Effector adapter", () => {
         ],
         [
           {
+            "id": "2",
             "loc": {
               "column": 29,
               "file": "/demo-app/counter/model.tsx",
@@ -183,7 +215,7 @@ describe("Redux DevTools Effector adapter", () => {
             "type": "⭐️ [event] buttonClicked",
           },
           {
-            "$counter": 1,
+            "$counter": "pekkek",
             "$ref": {
               "count": 1,
             },
@@ -197,6 +229,7 @@ describe("Redux DevTools Effector adapter", () => {
         ],
         [
           {
+            "id": "4",
             "loc": {
               "column": 24,
               "file": "/demo-app/counter/model.tsx",
@@ -232,6 +265,43 @@ describe("Redux DevTools Effector adapter", () => {
         ],
         [
           {
+            "id": "81",
+            "loc": {
+              "column": 19,
+              "file": "/demo-app/counter/model.tsx",
+              "line": 88,
+            },
+            "trace": [
+              {
+                "name": undefined,
+                "type": "on",
+                "value": "kekpek",
+              },
+              {
+                "name": "buttonClicked",
+                "type": "event",
+                "value": undefined,
+              },
+            ],
+            "type": "🧳 [store] $counter",
+            "value": "kekpek",
+          },
+          {
+            "$counter": "kekpek",
+            "$ref": {
+              "count": 1,
+            },
+            "combine($counter, $ref)": {
+              "count": 1,
+              "ref": {
+                "count": 1,
+              },
+            },
+          },
+        ],
+        [
+          {
+            "id": "55",
             "loc": {
               "column": 13,
               "file": "/demo-app/counter/model.tsx",
@@ -267,7 +337,7 @@ describe("Redux DevTools Effector adapter", () => {
             },
           },
           {
-            "$counter": 2,
+            "$counter": "kekpek",
             "$ref": {
               "count": 2,
             },
@@ -281,6 +351,7 @@ describe("Redux DevTools Effector adapter", () => {
         ],
         [
           {
+            "id": "63",
             "trace": [
               {
                 "name": undefined,
@@ -317,7 +388,7 @@ describe("Redux DevTools Effector adapter", () => {
             },
           },
           {
-            "$counter": 2,
+            "$counter": "kekpek",
             "$ref": {
               "count": 2,
             },
@@ -331,6 +402,7 @@ describe("Redux DevTools Effector adapter", () => {
         ],
         [
           {
+            "id": "60",
             "loc": {
               "column": 0,
               "file": "/demo-app/counter/model.tsx",
@@ -381,7 +453,7 @@ describe("Redux DevTools Effector adapter", () => {
             "value": 2,
           },
           {
-            "$counter": 2,
+            "$counter": "kekpek",
             "$ref": {
               "count": 2,
             },
@@ -395,6 +467,7 @@ describe("Redux DevTools Effector adapter", () => {
         ],
         [
           {
+            "id": "8",
             "loc": {
               "column": 25,
               "file": "/demo-app/counter/model.tsx",
@@ -450,7 +523,7 @@ describe("Redux DevTools Effector adapter", () => {
             "type": "☄️ [effect] someSideEffectFx",
           },
           {
-            "$counter": 2,
+            "$counter": "kekpek",
             "$ref": {
               "count": 2,
             },
@@ -464,6 +537,7 @@ describe("Redux DevTools Effector adapter", () => {
         ],
         [
           {
+            "id": "31",
             "loc": {
               "column": 26,
               "file": "/demo-app/counter/model.tsx",
@@ -519,7 +593,7 @@ describe("Redux DevTools Effector adapter", () => {
             "type": "☄️ [effect] someOtherEffectFx",
           },
           {
-            "$counter": 2,
+            "$counter": "kekpek",
             "$ref": {
               "count": 2,
             },
@@ -534,13 +608,14 @@ describe("Redux DevTools Effector adapter", () => {
         ],
         [
           {
+            "id": "32",
             "params": 2,
             "result": 2,
             "trace": [],
             "type": "✅ [effect] someOtherEffectFx.done",
           },
           {
-            "$counter": 2,
+            "$counter": "kekpek",
             "$ref": {
               "count": 2,
             },
@@ -556,6 +631,7 @@ describe("Redux DevTools Effector adapter", () => {
         ],
         [
           {
+            "id": "69",
             "loc": {
               "column": 21,
               "file": "/demo-app/counter/model.tsx",
@@ -608,7 +684,7 @@ describe("Redux DevTools Effector adapter", () => {
             "value": "2_kek",
           },
           {
-            "$counter": 2,
+            "$counter": "kekpek",
             "$ref": {
               "count": 2,
             },
@@ -624,6 +700,7 @@ describe("Redux DevTools Effector adapter", () => {
         ],
         [
           {
+            "id": "70",
             "loc": {
               "column": 10,
               "file": "/demo-app/counter/model.tsx",
@@ -691,7 +768,7 @@ describe("Redux DevTools Effector adapter", () => {
             "type": "⭐️ [event] a",
           },
           {
-            "$counter": 2,
+            "$counter": "kekpek",
             "$ref": {
               "count": 2,
             },
@@ -707,6 +784,7 @@ describe("Redux DevTools Effector adapter", () => {
         ],
         [
           {
+            "id": "77",
             "loc": {
               "column": 0,
               "file": "/demo-app/counter/model.tsx",
@@ -779,7 +857,7 @@ describe("Redux DevTools Effector adapter", () => {
             "value": "2_kek",
           },
           {
-            "$counter": 2,
+            "$counter": "kekpek",
             "$ref": {
               "count": 2,
             },
@@ -795,6 +873,7 @@ describe("Redux DevTools Effector adapter", () => {
         ],
         [
           {
+            "id": "78",
             "trace": [
               {
                 "name": "a",
@@ -862,7 +941,7 @@ describe("Redux DevTools Effector adapter", () => {
             "value": "2_kek",
           },
           {
-            "$counter": 2,
+            "$counter": "kekpek",
             "$ref": {
               "count": 2,
             },
@@ -878,6 +957,7 @@ describe("Redux DevTools Effector adapter", () => {
         ],
         [
           {
+            "id": "71",
             "loc": {
               "column": 10,
               "file": "/demo-app/counter/model.tsx",
@@ -955,7 +1035,7 @@ describe("Redux DevTools Effector adapter", () => {
             "type": "⭐️ [event] b",
           },
           {
-            "$counter": 2,
+            "$counter": "kekpek",
             "$ref": {
               "count": 2,
             },
@@ -971,6 +1051,7 @@ describe("Redux DevTools Effector adapter", () => {
         ],
         [
           {
+            "id": "73",
             "loc": {
               "column": 21,
               "file": "/demo-app/counter/model.tsx",
@@ -1038,7 +1119,7 @@ describe("Redux DevTools Effector adapter", () => {
             "type": "⭐️ [event] cases.aaa",
           },
           {
-            "$counter": 2,
+            "$counter": "kekpek",
             "$ref": {
               "count": 2,
             },
@@ -1054,6 +1135,7 @@ describe("Redux DevTools Effector adapter", () => {
         ],
         [
           {
+            "id": "79",
             "loc": {
               "column": 0,
               "file": "/demo-app/counter/model.tsx",
@@ -1126,7 +1208,7 @@ describe("Redux DevTools Effector adapter", () => {
             "value": "2_kek",
           },
           {
-            "$counter": 2,
+            "$counter": "kekpek",
             "$ref": {
               "count": 2,
             },
@@ -1142,13 +1224,14 @@ describe("Redux DevTools Effector adapter", () => {
         ],
         [
           {
+            "id": "9",
             "params": 2,
             "result": 2,
             "trace": [],
             "type": "✅ [effect] someSideEffectFx.done",
           },
           {
-            "$counter": 2,
+            "$counter": "kekpek",
             "$ref": {
               "count": 2,
             },
@@ -1164,6 +1247,7 @@ describe("Redux DevTools Effector adapter", () => {
         ],
         [
           {
+            "id": "69",
             "loc": {
               "column": 21,
               "file": "/demo-app/counter/model.tsx",
@@ -1216,7 +1300,7 @@ describe("Redux DevTools Effector adapter", () => {
             "value": "2_kek",
           },
           {
-            "$counter": 2,
+            "$counter": "kekpek",
             "$ref": {
               "count": 2,
             },
@@ -1232,6 +1316,7 @@ describe("Redux DevTools Effector adapter", () => {
         ],
         [
           {
+            "id": "70",
             "loc": {
               "column": 10,
               "file": "/demo-app/counter/model.tsx",
@@ -1299,7 +1384,7 @@ describe("Redux DevTools Effector adapter", () => {
             "type": "⭐️ [event] a",
           },
           {
-            "$counter": 2,
+            "$counter": "kekpek",
             "$ref": {
               "count": 2,
             },
@@ -1315,6 +1400,7 @@ describe("Redux DevTools Effector adapter", () => {
         ],
         [
           {
+            "id": "77",
             "loc": {
               "column": 0,
               "file": "/demo-app/counter/model.tsx",
@@ -1387,7 +1473,7 @@ describe("Redux DevTools Effector adapter", () => {
             "value": "2_kek",
           },
           {
-            "$counter": 2,
+            "$counter": "kekpek",
             "$ref": {
               "count": 2,
             },
@@ -1403,6 +1489,7 @@ describe("Redux DevTools Effector adapter", () => {
         ],
         [
           {
+            "id": "78",
             "trace": [
               {
                 "name": "a",
@@ -1470,7 +1557,7 @@ describe("Redux DevTools Effector adapter", () => {
             "value": "2_kek",
           },
           {
-            "$counter": 2,
+            "$counter": "kekpek",
             "$ref": {
               "count": 2,
             },
@@ -1486,6 +1573,7 @@ describe("Redux DevTools Effector adapter", () => {
         ],
         [
           {
+            "id": "71",
             "loc": {
               "column": 10,
               "file": "/demo-app/counter/model.tsx",
@@ -1563,7 +1651,7 @@ describe("Redux DevTools Effector adapter", () => {
             "type": "⭐️ [event] b",
           },
           {
-            "$counter": 2,
+            "$counter": "kekpek",
             "$ref": {
               "count": 2,
             },
@@ -1579,6 +1667,7 @@ describe("Redux DevTools Effector adapter", () => {
         ],
         [
           {
+            "id": "73",
             "loc": {
               "column": 21,
               "file": "/demo-app/counter/model.tsx",
@@ -1646,7 +1735,7 @@ describe("Redux DevTools Effector adapter", () => {
             "type": "⭐️ [event] cases.aaa",
           },
           {
-            "$counter": 2,
+            "$counter": "kekpek",
             "$ref": {
               "count": 2,
             },
@@ -1662,6 +1751,7 @@ describe("Redux DevTools Effector adapter", () => {
         ],
         [
           {
+            "id": "79",
             "loc": {
               "column": 0,
               "file": "/demo-app/counter/model.tsx",
@@ -1734,7 +1824,7 @@ describe("Redux DevTools Effector adapter", () => {
             "value": "2_kek",
           },
           {
-            "$counter": 2,
+            "$counter": "kekpek",
             "$ref": {
               "count": 2,
             },

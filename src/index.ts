@@ -61,6 +61,12 @@ export function attachReduxDevTools({
           act.loc = m.loc;
         }
 
+        /**
+         * Providing each log with entity id,
+         * so it is easier to debug updates of units with similar or equal names
+         */
+        act.id = m.id
+
         controller.send(act, { ...state });
       }
     },
