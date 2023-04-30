@@ -22,9 +22,11 @@ describe("Redux DevTools Effector adapter", () => {
       name: "Test app",
       scope,
       trace: true,
+      stateTab: true,
+      batch: false,
     });
 
-    expect(init.mock.calls.length > 0).toBe(true)
+    expect(init.mock.calls.length > 0).toBe(true);
     expect(init.mock.calls).toMatchInlineSnapshot(`
       [
         [
@@ -36,7 +38,7 @@ describe("Redux DevTools Effector adapter", () => {
     await allSettled(buttonClicked, { scope });
     await allSettled(buttonClicked, { scope });
 
-    expect(send.mock.calls.length > 0).toBe(true)
+    expect(send.mock.calls.length > 0).toBe(true);
     expect(send.mock.calls).toMatchInlineSnapshot(`
       [
         [
