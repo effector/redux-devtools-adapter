@@ -4,7 +4,7 @@ import type { Scope, Show } from "effector";
 type LogsQueueSettings =
   | boolean
   | {
-      maxAge?: number;
+      size?: number;
       latency?: number;
     };
 
@@ -14,6 +14,7 @@ export function attachReduxDevTools({
   trace,
   devToolsConfig,
   batch = true,
+  stateTab = false,
 }: {
   /**
    * Effector's Scope, which calculations and state will be inspected
@@ -33,6 +34,12 @@ export function attachReduxDevTools({
    */
   batch?: Show<LogsQueueSettings>;
   /**
+   * Enables state tab with fully visible states of all stores in the app
+   *
+   * Might cause a performance issues, `false` by default
+   */
+  stateTab?: boolean;
+  /**
    * Adds trace of effector calculations to every log
    */
   trace?: boolean;
@@ -41,8 +48,6 @@ export function attachReduxDevTools({
    * @see https://github.com/reduxjs/redux-devtools/blob/main/extension/docs/API/Arguments.md
    */
   devToolsConfig?: {
-    maxAge?: number;
-    latency?: number;
     serialize?:
       | boolean
       | {
@@ -54,10 +59,12 @@ export function attachReduxDevTools({
 
   if (!devTools) return fallback();
 
-  const stateControls = createState();
+  const stateControls = createState(stateTab);
   const { state } = stateControls;
   const controller = devTools.connect({
     name: getInstanceName(name),
+    maxAge: typeof batch === "object" ? batch.size : undefined,
+    latency: typeof batch === "object" ? batch.latency : undefined,
     ...devToolsConfig,
   });
   controller.init(state);
@@ -266,7 +273,14 @@ function readTrace(trace: Message[]) {
     };
   });
 }
-function createState() {
+function createState(enabled?: boolean) {
+  if (!enabled) {
+    return {
+      state: {},
+      saveStoreUpdate: () => {},
+    };
+  }
+
   const nameToId = {} as Record<string, string>;
   const state = {} as Record<string, unknown>;
 
@@ -305,7 +319,7 @@ function getDevTools() {
 // logs queue
 type Settings = Required<Exclude<LogsQueueSettings, boolean>>;
 const defaults: Settings = {
-  maxAge: 50,
+  size: 100,
   latency: 500,
 };
 function createBatcher(
@@ -317,7 +331,7 @@ function createBatcher(
     return (log: Record<string, unknown>) =>
       devToolsController.send(log, { ...state });
 
-  const { maxAge, latency } =
+  const { size, latency } =
     typeof settings === "object" ? { ...defaults, ...settings } : defaults;
 
   const queue = [] as {
@@ -340,7 +354,7 @@ function createBatcher(
   return (log: Record<string, unknown>) => {
     queue.push({ log, state: Object.assign({}, state) });
 
-    if (queue.length === maxAge) {
+    if (queue.length === size) {
       queue.shift();
     }
 
