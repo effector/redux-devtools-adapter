@@ -320,7 +320,7 @@ function createBatcher(
   const { maxAge, latency } =
     typeof settings === "object" ? { ...defaults, ...settings } : defaults;
 
-  let queue = [] as {
+  const queue = [] as {
     log: Record<string, unknown>;
     state: Record<string, unknown>;
   }[];
@@ -335,7 +335,6 @@ function createBatcher(
         devToolsController.send(item.log, item.state);
       }
     }
-    queue = [];
   }, latency);
 
   return (log: Record<string, unknown>) => {
