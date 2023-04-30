@@ -80,7 +80,7 @@ Enables batching of logs at the adapter's side. Redux DevTools are trying to pri
 With batching enabled adapter sends logs only once in `latency` milliseconds and with number of logs no more than `size` number.
 This means that only last `size` number of logs will be visible in the DevTools at all times.
 
-Enabled by default, defautls are: last 100 logs with timeout milliseconds.
+Enabled by default, defautls are: last 100 logs with latency 500 milliseconds.
 
 ### stateTab
 
