@@ -106,11 +106,11 @@ attachReduxDevTools({
 
 ### In the Next.js - Pages Router
 
-[See full example here](https://github.com/effector/next#pages-router-dev-tools-example)
+[Read effector/next documentation](https://github.com/effector/next#pages-router-dev-tools-example)
 
 ### In the Next.js - App Router
 
-[See full example here](https://github.com/effector/next#app-router-dev-tools-example)
+[Read effector/next documentation](https://github.com/effector/next#app-router-dev-tools-example)
 
 ## Release process
 
