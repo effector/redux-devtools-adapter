@@ -32,7 +32,7 @@ It is also useful to enable `loc` generation for dev environment, to see for exa
 
 ```json
 {
-  "plugins": [["effector/babel-plugin", { "addLoc": true }]]
+  "plugins": ["effector/babel-plugin", { "addLoc": true }]
 }
 ```
 
