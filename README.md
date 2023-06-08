@@ -104,6 +104,14 @@ attachReduxDevTools({
 });
 ```
 
+### In the Next.js - Pages Router
+
+[See full example here](https://github.com/effector/next#pages-router-dev-tools-example)
+
+### In the Next.js - App Router
+
+[See full example here](https://github.com/effector/next#app-router-dev-tools-example)
+
 ## Release process
 
 1. Check out the [draft release](https://github.com/effector/redux-devtools-adapter/releases).
