@@ -4,6 +4,7 @@ import { fork, allSettled, createEffect, attach } from "effector";
 import { buttonClicked } from "../demo-app/counter/model";
 
 import { attachReduxDevTools } from ".";
+import { createStore } from "effector";
 
 const init = vi.fn();
 const send = vi.fn();
@@ -2062,6 +2063,10 @@ describe("Redux DevTools Effector adapter", () => {
       effect: rootFx,
     });
 
+    const anotherLevelAttachFx = attach({
+      effect: attachedFx,
+    })
+
     const scope = fork();
 
     attachReduxDevTools({
@@ -2070,17 +2075,30 @@ describe("Redux DevTools Effector adapter", () => {
       batch: false,
     });
 
-    await allSettled(attachedFx, { scope });
+    await allSettled(anotherLevelAttachFx, { scope });
 
     expect(send.mock.calls).toMatchInlineSnapshot(`
       [
+        [
+          {
+            "id": "137",
+            "loc": {
+              "column": 33,
+              "file": "/src/index.test.ts",
+              "line": 2066,
+            },
+            "params": undefined,
+            "type": "☄️ [effect] anotherLevelAttachFx",
+          },
+          {},
+        ],
         [
           {
             "id": "114",
             "loc": {
               "column": 23,
               "file": "/src/index.test.ts",
-              "line": 2061,
+              "line": 2062,
             },
             "params": undefined,
             "type": "☄️ [effect] attachedFx",
@@ -2093,7 +2111,7 @@ describe("Redux DevTools Effector adapter", () => {
             "loc": {
               "column": 19,
               "file": "/src/index.test.ts",
-              "line": 2057,
+              "line": 2058,
             },
             "params": undefined,
             "type": "☄️ [effect] rootFx",
@@ -2118,7 +2136,62 @@ describe("Redux DevTools Effector adapter", () => {
           },
           {},
         ],
+        [
+          {
+            "id": "138",
+            "params": undefined,
+            "result": undefined,
+            "type": "✅ [effect] anotherLevelAttachFx.done",
+          },
+          {},
+        ],
       ]
     `);
   });
+
+  test('attach as a function', async () => {
+    const attachFnFx = attach({
+      source: createStore(0),
+      effect: () => {
+        // ok
+      }
+    })
+
+    const scope = fork();
+
+    attachReduxDevTools({
+      name: "Attached fx",
+      scope,
+      batch: false,
+    });
+
+    await allSettled(attachFnFx, { scope });
+
+    expect(send.mock.calls).toMatchInlineSnapshot(`
+      [
+        [
+          {
+            "id": "168",
+            "loc": {
+              "column": 23,
+              "file": "/src/index.test.ts",
+              "line": 2084,
+            },
+            "params": undefined,
+            "type": "☄️ [effect] attachFnFx",
+          },
+          {},
+        ],
+        [
+          {
+            "id": "169",
+            "params": undefined,
+            "result": undefined,
+            "type": "✅ [effect] attachFnFx.done",
+          },
+          {},
+        ],
+      ]
+    `)
+  })
 });
