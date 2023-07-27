@@ -97,8 +97,21 @@ export function attachReduxDevTools({
     },
   });
 
+  // handling of buttons
+  const unsub = controller.subscribe((message: any) => {
+    if (message?.payload?.type === "COMMIT") {
+      /**
+       * Committing the state to the devtools,
+       * so it is possible to cleanup all the logs
+       */
+      controller.init(state);
+      return;
+    }
+  });
+
   return () => {
     uninspect();
+    unsub();
   };
 }
 
