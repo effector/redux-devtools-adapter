@@ -98,7 +98,7 @@ export function attachReduxDevTools({
   });
 
   // handling of buttons
-  const unsub = controller.subscribe((message: any) => {
+  const unsub = controller?.subscribe?.((message: any) => {
     if (message?.payload?.type === "COMMIT") {
       /**
        * Committing the state to the devtools,
@@ -111,7 +111,7 @@ export function attachReduxDevTools({
 
   return () => {
     uninspect();
-    unsub();
+    unsub?.();
   };
 }
 
