@@ -1,5 +1,5 @@
-import { describe, test, expect, vi } from "vitest";
-import { fork, allSettled } from "effector";
+import { describe, test, expect, vi, beforeEach, afterEach } from "vitest";
+import { fork, allSettled, createEffect, attach } from "effector";
 
 import { buttonClicked } from "../demo-app/counter/model";
 
@@ -15,6 +15,10 @@ vi.stubGlobal("__REDUX_DEVTOOLS_EXTENSION__", {
 });
 
 describe("Redux DevTools Effector adapter", () => {
+  afterEach(() => {
+    init.mockClear();
+    send.mockClear();
+  });
   test("should work", async () => {
     const scope = fork();
 
@@ -2044,6 +2048,75 @@ describe("Redux DevTools Effector adapter", () => {
             "someOtherEffectFx.inFlight": 0,
             "someSideEffectFx.inFlight": 0,
           },
+        ],
+      ]
+    `);
+  });
+
+  test("attached effect shown correctly", async () => {
+    const rootFx = createEffect(() => {
+      // ok
+    });
+
+    const attachedFx = attach({
+      effect: rootFx,
+    });
+
+    const scope = fork();
+
+    attachReduxDevTools({
+      name: "Attached fx",
+      scope,
+      batch: false,
+    });
+
+    await allSettled(attachedFx, { scope });
+
+    expect(send.mock.calls).toMatchInlineSnapshot(`
+      [
+        [
+          {
+            "id": "114",
+            "loc": {
+              "column": 23,
+              "file": "/src/index.test.ts",
+              "line": 2061,
+            },
+            "params": undefined,
+            "type": "☄️ [effect] attachedFx",
+          },
+          {},
+        ],
+        [
+          {
+            "id": "91",
+            "loc": {
+              "column": 19,
+              "file": "/src/index.test.ts",
+              "line": 2057,
+            },
+            "params": undefined,
+            "type": "☄️ [effect] rootFx",
+          },
+          {},
+        ],
+        [
+          {
+            "id": "92",
+            "params": undefined,
+            "result": undefined,
+            "type": "✅ [effect] rootFx.done",
+          },
+          {},
+        ],
+        [
+          {
+            "id": "115",
+            "params": undefined,
+            "result": undefined,
+            "type": "✅ [effect] attachedFx.done",
+          },
+          {},
         ],
       ]
     `);
