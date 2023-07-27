@@ -122,8 +122,6 @@ function getInstanceName(name?: string): string {
 }
 
 // reporting
-const fxIdMap = new Map<unknown, string>();
-
 function createReporter(state: ReturnType<typeof createState>) {
   return (m: Message): Record<string, unknown> | void => {
     // errors
@@ -139,9 +137,7 @@ function createReporter(state: ReturnType<typeof createState>) {
 
     // effects
     if (isEffectCall(m)) {
-      const name = getName(m);
-      const callId = getEffectCallId(m);
-      fxIdMap.set(callId, name);
+      saveEffectCall(m);
       return {
         type: `☄️ [effect] ${m.name || "unknown"}`,
         params: m.value,
@@ -153,9 +149,7 @@ function createReporter(state: ReturnType<typeof createState>) {
     }
 
     if (isEffectFinally(m)) {
-      const callId = getEffectCallId(m);
-      const name = fxIdMap.get(callId)!;
-      fxIdMap.delete(callId);
+      const name = getParentEffectName(m);
 
       if ((m.value as any).status === "done") {
         return {
@@ -253,6 +247,35 @@ function isSample(m: Message) {
 }
 function isForward(m: Message) {
   return m.kind === "forward";
+}
+
+// effects tracking
+const fxIdMap = new Map<unknown, string[]>();
+
+function getCallsById(id: unknown) {
+  if (!fxIdMap.has(id)) {
+    fxIdMap.set(id, []);
+  }
+  return fxIdMap.get(id)!;
+}
+
+function saveEffectCall(m: Message) {
+  const name = getName(m);
+  const callId = getEffectCallId(m);
+  const calls = getCallsById(callId);
+  calls.push(name);
+}
+
+function getParentEffectName(m: Message) {
+  const callId = getEffectCallId(m);
+  const calls = getCallsById(callId);
+  const name = calls.pop();
+
+  if (calls.length === 0) {
+    fxIdMap.delete(callId);
+  }
+
+  return name;
 }
 
 // util
