@@ -140,7 +140,8 @@ function createReporter(state: ReturnType<typeof createState>) {
     // effects
     if (isEffectCall(m)) {
       const name = getName(m);
-      fxIdMap.set(m.stack.fxID, name);
+      const callId = getEffectCallId(m);
+      fxIdMap.set(callId, name);
       return {
         type: `☄️ [effect] ${m.name || "unknown"}`,
         params: m.value,
@@ -152,8 +153,9 @@ function createReporter(state: ReturnType<typeof createState>) {
     }
 
     if (isEffectFinally(m)) {
-      const name = fxIdMap.get(m.stack.fxID)!;
-      fxIdMap.delete(m.stack.fxID);
+      const callId = getEffectCallId(m);
+      const name = fxIdMap.get(callId)!;
+      fxIdMap.delete(callId);
 
       if ((m.value as any).status === "done") {
         return {
@@ -256,6 +258,12 @@ function isForward(m: Message) {
 // util
 function isEffectorInternal(m: Message) {
   return !!m.meta.named;
+}
+function getEffectCallId(m: Message) {
+  if (!isEffectCall(m)) return null;
+  if (!isEffectFinally(m)) return null;
+
+  return m.stack.fxID;
 }
 function getName(m: Message) {
   return m.name || locToString(m.loc) || `unknown_${m.id}`;
