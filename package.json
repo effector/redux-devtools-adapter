@@ -48,6 +48,6 @@
     "zx": "^7.2.1"
   },
   "peerDependencies": {
-    "effector": "^22.8.1"
+    "effector": "^22.8.1 || ^23.0.0"
   }
 }
