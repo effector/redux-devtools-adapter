@@ -1920,7 +1920,7 @@ describe("Redux DevTools Effector adapter", () => {
             "loc": {
               "column": 33,
               "file": "/src/index.test.ts",
-              "line": 2066,
+              "line": 1901,
             },
             "params": undefined,
             "type": "☄️ [effect] anotherLevelAttachFx",
@@ -1933,7 +1933,7 @@ describe("Redux DevTools Effector adapter", () => {
             "loc": {
               "column": 23,
               "file": "/src/index.test.ts",
-              "line": 2062,
+              "line": 1897,
             },
             "params": undefined,
             "type": "☄️ [effect] attachedFx",
@@ -1946,7 +1946,7 @@ describe("Redux DevTools Effector adapter", () => {
             "loc": {
               "column": 19,
               "file": "/src/index.test.ts",
-              "line": 2058,
+              "line": 1893,
             },
             "params": undefined,
             "type": "☄️ [effect] rootFx",
@@ -2010,7 +2010,7 @@ describe("Redux DevTools Effector adapter", () => {
             "loc": {
               "column": 23,
               "file": "/src/index.test.ts",
-              "line": 2153,
+              "line": 1988,
             },
             "params": undefined,
             "type": "☄️ [effect] attachFnFx",
